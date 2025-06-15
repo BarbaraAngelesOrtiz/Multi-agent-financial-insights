@@ -1,0 +1,24 @@
+# Data manipulation
+pandas
+numpy
+
+# Visualization
+matplotlib
+plotly
+
+# APIs
+alpha_vantage
+gspread
+oauth2client
+
+# Google Cloud
+google-auth
+google-api-python-client
+google-cloud-bigquery
+
+# Utils
+python-dotenv
+requests
+
+# Optional: For scheduling/reporting if needed later
+pytz
