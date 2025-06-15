@@ -20,5 +20,8 @@ google-cloud-bigquery
 python-dotenv
 requests
 
+# Deep learning (required by your script)
+torch
+
 # Optional: For scheduling/reporting if needed later
 pytz
