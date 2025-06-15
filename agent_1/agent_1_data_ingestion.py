@@ -179,6 +179,7 @@ class Normalizer():
 
 # normalize
 scaler = Normalizer()
+data_close_price = data[['Close']].values  # ← Asegurate de que 'data' esté definido
 normalized_data_close_price = scaler.fit_transform(data_close_price)
 
 # Función para calcular el RSI
