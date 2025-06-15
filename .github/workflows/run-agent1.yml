@@ -3,7 +3,7 @@ name: Run Agent 1 Daily
 on:
   schedule:
     - cron: '0 22 * * *'  # Todos los días a las 22:00 UTC (19:00 Argentina aprox)
-  workflow_dispatch:       # Para ejecutarlo manualmente
+  workflow_dispatch:
 
 jobs:
   run-agent1:
@@ -30,9 +30,12 @@ jobs:
       - name: Run agent 1 script
         run: python agent_1/agent_1_data_ingestion.py
 
-
       - name: List files
         run: ls -R
+
+      - name: Confirm success
+        run: echo "✅ Script ejecutado exitosamente"
+
 
 
         
