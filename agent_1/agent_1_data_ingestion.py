@@ -8,7 +8,7 @@ Original file is located at
 """
 
 #@title Load Python libraries
-! pip install alpha_vantage -q
+pip install alpha_vantage -q
 
 # pip install numpy
 import numpy as np
