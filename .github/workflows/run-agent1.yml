@@ -27,5 +27,12 @@ jobs:
         run: |
           echo "${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}" > credentials.json
 
-      - name: Run agent 1
-        run: python agent_1_data_ingestion.py
+      - name: Run agent 1 script
+        run: python agent_1/agent_1_data_ingestion.py
+
+      - name: List files
+        run: ls -R
+
+
+        
+
