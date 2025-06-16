@@ -1,0 +1,30 @@
+name: Agent 2 - Data Processing
+
+on:
+  schedule:
+    - cron: '10 19 * * *'  # Se ejecuta todos los días a las 19:10 UTC
+  workflow_dispatch:       # Permite correrlo manualmente
+
+jobs:
+  run-agent2:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas gspread oauth2client numpy
+
+      - name: Run Agent 2 - Data Processing
+        env:
+          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+        run: |
+          python agent_2/agent_2_data_processing.py
