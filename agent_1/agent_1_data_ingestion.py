@@ -37,7 +37,8 @@ def write_to_google_sheets(sheet_name, dataframe):
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
     try:
-        sheet = client.open(sheet_name).sheet1
+        sheet = client.open(sheet_name).worksheet('Sheet1')
+
     except gspread.SpreadsheetNotFound:
         raise Exception(f"Spreadsheet with name '{sheet_name}' not found. Check the title and permissions.")
 
@@ -55,5 +56,5 @@ def main():
     symbol = "AAPL"
     print(f"Fetching data for {symbol}...")
     df = get_alpha_vantage_data(symbol, alpha_key)
-    p
+    
 
