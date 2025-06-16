@@ -23,7 +23,7 @@ jobs:
       - name: Run Agent 1 Script
         env:
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
-          GOOGLE_CREDS_JSON: ${{ secrets.GOOGLE_CREDS_JSON }}
+          GOOGLE_CREDS_JSON: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         run: python agent_1/agent_1_data_ingestion.py
 
 
