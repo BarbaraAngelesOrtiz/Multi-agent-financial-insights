@@ -45,30 +45,30 @@ def write_dataframe_to_worksheet(spreadsheet, worksheet_name, df):
 
         worksheet.clear()
         worksheet.update([df.columns.values.tolist()] + df.values.tolist())
-        print(f"✅ Datos de {worksheet_name} actualizados en Google Sheets.")
+        print(f"✅ Data for {worksheet_name} updated in Google Sheets.")
     except Exception as e:
-        print(f"⚠️ Error escribiendo en la pestaña '{worksheet_name}': {e}")
+        print(f"⚠️ Error writing in tab '{worksheet_name}': {e}")
 
 def main():
-    print("🚀 Iniciando Agente 1 - Multi-symbol Ingestion")
+    print("🚀 Starting Agent 1 - Multi-symbol Ingestion")
 
     alpha_key = os.getenv('ALPHA_VANTAGE_API_KEY')
     if not alpha_key:
         raise Exception("ALPHA_VANTAGE_API_KEY not found.")
 
-    sheet_name = "Diario"  
+    sheet_name = "Diary"  
     symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"] 
 
     client = connect_to_sheets()
     spreadsheet = client.open(sheet_name)
 
     for symbol in symbols:
-        print(f"📥 Descargando datos para: {symbol}")
+        print(f"📥Downloading data for: {symbol}")
         try:
             df = get_alpha_vantage_data(symbol, alpha_key)
             write_dataframe_to_worksheet(spreadsheet, symbol, df)
         except Exception as e:
-            print(f"⚠️ Error con {symbol}: {e}")
+            print(f"⚠️ Error  {symbol}: {e}")
 
 if __name__ == "__main__":
     main()
