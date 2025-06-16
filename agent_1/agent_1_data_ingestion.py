@@ -5,16 +5,16 @@ import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-def get_alpha_vantage_data(symbol: str, api_key: str) -> pd.DataFrame:
-    url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&outputsize=compact&datatype=json&apikey={api_key}'
+def get_alpha_vantage_data(symbol, api_key):
+    url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&outputsize=compact&apikey={api_key}'
     response = requests.get(url)
     data = response.json()
 
-    if 'Time Series (Daily)' not in data:
-        raise Exception(f"Error fetching data for {symbol}: {data.get('Note') or data.get('Error Message') or 'Unknown error'}")
+    if "Time Series (Daily)" not in data:
+        raise Exception("Error fetching data from Alpha Vantage.")
 
-    ts_data = data['Time Series (Daily)']
-    df = pd.DataFrame.from_dict(ts_data, orient='index').sort_index()
+    time_series = data["Time Series (Daily)"]
+    df = pd.DataFrame.from_dict(time_series, orient='index')
     df = df.rename(columns={
         "1. open": "Open",
         "2. high": "High",
@@ -22,26 +22,28 @@ def get_alpha_vantage_data(symbol: str, api_key: str) -> pd.DataFrame:
         "4. close": "Close",
         "5. volume": "Volume"
     })
-    df.index.name = 'Date'
+    df.index.name = "Date"
     df.reset_index(inplace=True)
+    df.sort_values(by="Date", ascending=False, inplace=True)
     return df
 
-def write_to_google_sheets(sheet_name: str, df: pd.DataFrame):
+def write_to_google_sheets(sheet_name, dataframe):
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    
     creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
     if not creds_json:
-        raise Exception("Google credentials JSON not found in environment variables.")
-    
+        raise Exception("Google Sheets credentials not found in environment variables.")
+
     creds_dict = json.loads(creds_json)
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
+    try:
+        sheet = client.open(sheet_name).sheet1
+    except gspread.SpreadsheetNotFound:
+        raise Exception(f"Spreadsheet with name '{sheet_name}' not found. Check the title and permissions.")
 
-    sheet = client.open(sheet_name).sheet1
+    # Limpiar y escribir encabezados + datos
     sheet.clear()
-    
-    # Escribimos encabezados y datos
-    sheet.update([df.columns.values.tolist()] + df.values.tolist())
+    sheet.update([dataframe.columns.values.tolist()] + dataframe.values.tolist())
 
 def main():
     print("Starting Agent 1 - Data Ingestion...")
@@ -50,16 +52,7 @@ def main():
     if not alpha_key:
         raise Exception("Alpha Vantage API key not found in environment variables.")
 
-    symbol = 'AAPL'  # Cambia o hazlo dinámico si quieres varios
-    sheet_name = 'Financial Data'  # Debe existir en tu Google Drive
-
+    symbol = "AAPL"
     print(f"Fetching data for {symbol}...")
     df = get_alpha_vantage_data(symbol, alpha_key)
-    print("Data fetched successfully.")
-
-    print("Writing data to Google Sheets...")
-    write_to_google_sheets(sheet_name, df)
-    print("Data written successfully.")
-
-if __name__ == "__main__":
-    main()
+    p
