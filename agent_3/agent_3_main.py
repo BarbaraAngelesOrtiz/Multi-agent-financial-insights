@@ -28,14 +28,14 @@ def analyze_signals(df: pd.DataFrame, symbol: str) -> str:
     venta = int(latest.get("venta1", 0))
 
     if rsi is None or ema10 is None:
-        return f"Datos insuficientes para analizar {symbol}."
+        return f"Insufficient data to analyze {symbol}."
 
     if compra:
-        return f"COMPRAR {symbol} (RSI={rsi}, EMA10>EMA20)"
+        return f"BUY {symbol} (RSI={rsi}, EMA10>EMA20)"
     elif venta:
-        return f"VENDER {symbol} (RSI={rsi}, EMA10<EMA20)"
+        return f"SELL {symbol} (RSI={rsi}, EMA10<EMA20)"
     else:
-        return f"MANTENER {symbol} (RSI={rsi})"
+        return f"KEEP {symbol} (RSI={rsi})"
 
 def write_recommendations(sheet_name: str, recommendations: list):
     client = connect_to_google_sheets()
@@ -49,20 +49,20 @@ def write_recommendations(sheet_name: str, recommendations: list):
     df = pd.DataFrame(recommendations, columns=["Símbolo", "Recomendación"])
     worksheet.clear()
     worksheet.update([df.columns.values.tolist()] + df.values.tolist())
-    print("✅ Recomendaciones escritas en pestaña 'Recomendaciones'.")
+    print("✅ Recommendations written in the 'Recommendations' tab.")
 
 def main():
     sheet_name = "Diary"
     symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"]
 
-    print("\n===== Agente 3 - Recomendador Financiero =====\n")
+    print("\n===== Agent 3 - Financial Recommender =====\n")
     all_recommendations = []
 
     for symbol in symbols:
         try:
             df = load_signals(sheet_name, symbol)
             if df.empty or 'Close' not in df.columns:
-                print(f"{symbol}: Datos insuficientes.")
+                print(f"{symbol}:Insufficient data.")
                 continue
 
             recommendation = analyze_signals(df, symbol)
@@ -70,7 +70,7 @@ def main():
             all_recommendations.append((symbol, recommendation))
 
         except Exception as e:
-            print(f"{symbol}: Error al procesar - {e}")
+            print(f"{symbol}: Error processing - {e}")
 
     write_recommendations(sheet_name, all_recommendations)
 
