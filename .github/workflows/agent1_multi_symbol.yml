@@ -1,10 +1,9 @@
-name: Agent 1 - Daily Data Ingestion
+name: Agent 1 - Multi-Symbol Ingestion
 
 on:
   schedule:
-    - cron: '0 19 * * *'  # Runs daily at 19:00 UTC (adjust according to your time zone)
-  workflow_dispatch:      # Allows you to run manually from GitHub Actions
-
+    - cron: '0 19 * * *'  # Every day at 19:00 UTC
+  workflow_dispatch:     
 jobs:
   run-agent1:
     runs-on: ubuntu-latest
@@ -21,17 +20,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas requests gspread oauth2client
+          pip install requests gspread oauth2client pandas
 
-      - name: Run Agent 1 script
+      - name: Run Agent 1 Multi-symbol
         env:
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
           GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         run: |
           python agent_1/agent_1_data_ingestion.py
-
-
-
 
 
         
