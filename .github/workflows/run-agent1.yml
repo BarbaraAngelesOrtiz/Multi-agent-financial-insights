@@ -2,8 +2,8 @@ name: Agent 1 - Daily Data Ingestion
 
 on:
   schedule:
-    - cron: '0 19 * * *'  # Ejecuta todos los días a las 19:00 UTC
-  workflow_dispatch:      # Permite ejecutarlo manualmente desde GitHub
+    - cron: '0 19 * * *'  # Runs daily at 19:00 UTC (adjust according to your time zone)
+  workflow_dispatch:      # Allows you to run manually from GitHub Actions
 
 jobs:
   run-agent1:
