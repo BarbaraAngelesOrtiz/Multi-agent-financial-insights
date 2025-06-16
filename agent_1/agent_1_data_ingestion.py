@@ -67,4 +67,21 @@ def main():
     sheet_name = "Nombre exacto de tu Google Sheet"
     write_to_google_sheets(sheet_name, df)
 
+def test_google_sheets_write():
+    import os, json, gspread
+    from oauth2client.service_account import ServiceAccountCredentials
+
+    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
+    creds_dict = json.loads(creds_json)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    client = gspread.authorize(creds)
+
+    sheet_name = "Nombre exacto de tu Google Sheet"
+    sheet = client.open(sheet_name).worksheet('Sheet1')
+
+    sheet.clear()
+    sheet.update('A1', 'Test successful!')
+    print("Test write done.")
+
 
