@@ -2,8 +2,8 @@ name: Agent 2 - Data Processing
 
 on:
   schedule:
-    - cron: '10 19 * * *'  # Se ejecuta todos los días a las 19:10 UTC
-  workflow_dispatch:       # Permite correrlo manualmente
+    - cron: '03 19 * * *' 
+  workflow_dispatch:       
 
 jobs:
   run-agent2:
