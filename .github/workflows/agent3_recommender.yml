@@ -2,8 +2,8 @@ name: Agent 3 - Recommender Engine
 
 on:
   schedule:
-    - cron: '15 19 * * *'  # Todos los días a las 19:15 UTC (después de Agente 1 y 2)
-  workflow_dispatch:       # Permite ejecutarlo manualmente
+    - cron: '15 19 * * *'  # Every day at 19:15 UTC (after Agent 1 and 2)
+  workflow_dispatch:       # Allows you to run it manually
 
 jobs:
   run-agent3:
