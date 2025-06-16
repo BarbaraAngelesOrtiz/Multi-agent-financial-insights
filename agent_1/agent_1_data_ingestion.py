@@ -29,7 +29,7 @@ def get_alpha_vantage_data(symbol: str, api_key: str) -> pd.DataFrame:
 def write_to_google_sheets(sheet_name: str, df: pd.DataFrame):
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     
-    creds_json = os.getenv('GOOGLE_CREDS_JSON')
+    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
     if not creds_json:
         raise Exception("Google credentials JSON not found in environment variables.")
     
