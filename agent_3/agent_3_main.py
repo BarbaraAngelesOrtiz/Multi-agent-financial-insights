@@ -1,15 +1,12 @@
-# agent_3/main.py - Agente ADK que genera recomendaciones desde Google Sheets
-
 import os
 import json
 import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 
-# === FUNCIONES BASE ===
 def connect_to_google_sheets():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds_json = os.getenv("GOOGLE_SHEETS_CREDENTIALS")
+    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
     if not creds_json:
         raise Exception("Google Sheets credentials not found in environment variables.")
     creds_dict = json.loads(creds_json)
@@ -34,28 +31,49 @@ def analyze_signals(df: pd.DataFrame, symbol: str) -> str:
         return f"Datos insuficientes para analizar {symbol}."
 
     if compra:
-        return f"Recomendación: COMPRAR {symbol}. RSI={rsi}, EMA10 > EMA20."
+        return f"COMPRAR {symbol} (RSI={rsi}, EMA10>EMA20)"
     elif venta:
-        return f"Recomendación: VENDER {symbol}. RSI={rsi}, EMA10 < EMA20."
+        return f"VENDER {symbol} (RSI={rsi}, EMA10<EMA20)"
     else:
-        return f"{symbol}: No hay señal clara hoy. RSI={rsi}."
+        return f"MANTENER {symbol} (RSI={rsi})"
 
-# === MAIN ===
+def write_recommendations(sheet_name: str, recommendations: list):
+    client = connect_to_google_sheets()
+    spreadsheet = client.open(sheet_name)
+
+    try:
+        worksheet = spreadsheet.worksheet("Recomendaciones")
+    except gspread.WorksheetNotFound:
+        worksheet = spreadsheet.add_worksheet(title="Recomendaciones", rows="100", cols="2")
+
+    df = pd.DataFrame(recommendations, columns=["Símbolo", "Recomendación"])
+    worksheet.clear()
+    worksheet.update([df.columns.values.tolist()] + df.values.tolist())
+    print("✅ Recomendaciones escritas en pestaña 'Recomendaciones'.")
+
 def main():
     sheet_name = "Diary"
     symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"]
 
-    print("\n===== Agente 3 - Generador de Recomendaciones =====\n")
+    print("\n===== Agente 3 - Recomendador Financiero =====\n")
+    all_recommendations = []
+
     for symbol in symbols:
         try:
             df = load_signals(sheet_name, symbol)
-            if df.empty:
-                print(f"{symbol}: Sin datos.")
+            if df.empty or 'Close' not in df.columns:
+                print(f"{symbol}: Datos insuficientes.")
                 continue
+
             recommendation = analyze_signals(df, symbol)
-            print(recommendation)
+            print(f"{symbol}: {recommendation}")
+            all_recommendations.append((symbol, recommendation))
+
         except Exception as e:
-            print(f"Error con {symbol}: {e}")
+            print(f"{symbol}: Error al procesar - {e}")
+
+    write_recommendations(sheet_name, all_recommendations)
 
 if __name__ == "__main__":
     main()
+
