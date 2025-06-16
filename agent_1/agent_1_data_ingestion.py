@@ -50,7 +50,7 @@ def main():
     latest_close = get_alpha_vantage_data(symbol, alpha_key)
     print(f"Latest closing price for {symbol}: {latest_close}")
 
-    sheet_name = 'Your Exact Google Sheet Name Here'  # Cambia por el nombre exacto de tu Google Sheet
+    sheet_name = 'Diario'  # Cambia por el nombre exacto de tu Google Sheet
     print("Writing latest close price to Google Sheets...")
     write_to_google_sheets(sheet_name, latest_close)
     print("Data written to Google Sheets successfully.")
