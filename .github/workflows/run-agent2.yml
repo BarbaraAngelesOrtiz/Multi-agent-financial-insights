@@ -1,4 +1,4 @@
-name: Run Agents Workflow
+name: Agent 2 - Daily Processing Indicators
 
 on:
   schedule:
