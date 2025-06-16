@@ -28,6 +28,7 @@ def get_alpha_vantage_data(symbol, api_key):
     return df
 
 def write_to_google_sheets(sheet_name, dataframe):
+    print("Starting Google Sheets update...")
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
     if not creds_json:
@@ -36,15 +37,20 @@ def write_to_google_sheets(sheet_name, dataframe):
     creds_dict = json.loads(creds_json)
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
+
     try:
         sheet = client.open(sheet_name).worksheet('Sheet1')
-
+        print(f"Opened spreadsheet '{sheet_name}' and worksheet 'Sheet1'")
     except gspread.SpreadsheetNotFound:
         raise Exception(f"Spreadsheet with name '{sheet_name}' not found. Check the title and permissions.")
 
-    # Limpiar y escribir encabezados + datos
+    print("Clearing the sheet...")
     sheet.clear()
+
+    print("Updating sheet with dataframe data...")
     sheet.update([dataframe.columns.values.tolist()] + dataframe.values.tolist())
+    print("Google Sheets updated successfully!")
+
 
 def main():
     print("Starting Agent 1 - Data Ingestion...")
@@ -56,5 +62,9 @@ def main():
     symbol = "AAPL"
     print(f"Fetching data for {symbol}...")
     df = get_alpha_vantage_data(symbol, alpha_key)
-    
+    print(f"Data fetched:\n{df.head()}")
+
+    sheet_name = "Nombre exacto de tu Google Sheet"
+    write_to_google_sheets(sheet_name, df)
+
 
