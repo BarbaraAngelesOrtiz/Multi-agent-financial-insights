@@ -2,7 +2,11 @@ import os
 import json
 import gspread
 import pandas as pd
+from dotenv import load_dotenv
 from oauth2client.service_account import ServiceAccountCredentials
+
+load_dotenv()  # ✅ Carga automática de .env
+
 
 def connect_to_google_sheets():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
