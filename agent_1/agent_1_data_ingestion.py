@@ -39,10 +39,12 @@ def write_to_google_sheets(sheet_name, dataframe):
     client = gspread.authorize(creds)
 
     try:
-        sheet = client.open(sheet_name).worksheet('Sheet1')
+        sheet = client.open(sheet_name).worksheet('Sheet1')  # <- pestaña de la hoja
         print(f"Opened spreadsheet '{sheet_name}' and worksheet 'Sheet1'")
     except gspread.SpreadsheetNotFound:
         raise Exception(f"Spreadsheet with name '{sheet_name}' not found. Check the title and permissions.")
+    except gspread.WorksheetNotFound:
+        raise Exception("Worksheet 'Sheet1' not found. Check the tab name in your spreadsheet.")
 
     print("Clearing the sheet...")
     sheet.clear()
@@ -50,7 +52,6 @@ def write_to_google_sheets(sheet_name, dataframe):
     print("Updating sheet with dataframe data...")
     sheet.update([dataframe.columns.values.tolist()] + dataframe.values.tolist())
     print("Google Sheets updated successfully!")
-
 
 def main():
     print("Starting Agent 1 - Data Ingestion...")
@@ -64,24 +65,8 @@ def main():
     df = get_alpha_vantage_data(symbol, alpha_key)
     print(f"Data fetched:\n{df.head()}")
 
-    sheet_name = "Nombre exacto de tu Google Sheet"
+    sheet_name = "Diario"  # ✅ Este es el nombre real del documento Google Sheet
     write_to_google_sheets(sheet_name, df)
 
-def test_google_sheets_write():
-    import os, json, gspread
-    from oauth2client.service_account import ServiceAccountCredentials
-
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
-    creds_dict = json.loads(creds_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-    client = gspread.authorize(creds)
-
-    sheet_name = "Nombre exacto de tu Google Sheet"
-    sheet = client.open(sheet_name).worksheet('Sheet1')
-
-    sheet.clear()
-    sheet.update('A1', 'Test successful!')
-    print("Test write done.")
-
-
+if __name__ == "__main__":
+    main()
