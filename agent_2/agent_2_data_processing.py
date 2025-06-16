@@ -37,7 +37,7 @@ def calculate_sma(series, period=14):
 def main():
     print("Starting Agent 2 - Data Processing...")
 
-    sheet_name = '1tiQ4ghpX_FB7hyySSjT-pzjMM_Cua6knRoTAfkHTr_s'  # Cambia acá al nombre exacto de tu hoja
+    sheet_name = 'Diario'  # Cambia acá al nombre exacto de tu hoja
 
     df, sheet = get_sheet_data(sheet_name)
     print(f"Data loaded: {len(df)} rows")
