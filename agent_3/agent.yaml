@@ -1,20 +1,20 @@
-# agent_3/agent.yaml - Configuración del agente ADK
+#agent_3/agent.yaml - ADK Agent Configuration
 
 schema_version: 1
 
 name: recommender-agent
 version: 0.1.0
 description: |
-  Agente 3 - Generador de recomendaciones basado en RSI y EMAs
-  utilizando datos procesados por Agente 2 desde Google Sheets.
-  Este agente interpreta señales técnicas y sugiere acciones (comprar, vender o mantener).
+  Agent 3 - Recommendation generator based on RSI and EMAs
+using data processed by Agent 2 from Google Sheets.
+This agent interprets technical signals and suggests actions (buy, sell, or hold).
 
 entry_point:
   command: python agent_3_main.py
 
 capabilities:
   - name: financial-insight
-    description: Interpreta señales técnicas y emite recomendaciones de compra o venta.
+    description: Interprets technical signals and issues buy or sell recommendations.
     input:
       format: google_sheets
     output:
