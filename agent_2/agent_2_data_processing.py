@@ -5,20 +5,7 @@ import numpy as np
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-def get_sheet_data(sheet_name):
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
-    if not creds_json:
-        raise Exception("Google Sheets credentials JSON not found in environment variables.")
-    creds_dict = json.loads(creds_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-    client = gspread.authorize(creds)
-    sheet = client.open(sheet_name).sheet1
-
-    data = sheet.get_all_records()
-    df = pd.DataFrame(data)
-    return df, sheet
-
+# RSI calculation
 def calculate_rsi(series, period=14):
     delta = series.diff()
     gain = delta.clip(lower=0)
@@ -31,33 +18,59 @@ def calculate_rsi(series, period=14):
     rsi = 100 - (100 / (1 + rs))
     return rsi
 
-def calculate_sma(series, period=14):
-    return series.rolling(window=period).mean()
+def calculate_indicators(df):
+    df["Close"] = pd.to_numeric(df["Close"], errors="coerce")
+    df["RSI"] = calculate_rsi(df["Close"])
+    df["EMA_10"] = df["Close"].ewm(span=10, adjust=False).mean()
+    df["EMA_20"] = df["Close"].ewm(span=20, adjust=False).mean()
+    df["EMA_40"] = df["Close"].ewm(span=40, adjust=False).mean()
+
+    df["compra1"] = ((df["EMA_10"] > df["EMA_20"]) & (df["RSI"] < 60)).astype(int)
+    df["compra2"] = ((df["EMA_10"] > df["EMA_20"]) & (df["EMA_20"] > df["EMA_40"])).astype(int)
+    df["venta1"] = ((df["RSI"] > 70) & (df["Close"] < df["EMA_10"])).astype(int)
+    df["venta2"] = ((df["RSI"] > 70) & (df["Close"] < df["EMA_20"])).astype(int)
+
+    df = df.round(2)
+    return df
+
+def connect_to_sheets():
+    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
+    if not creds_json:
+        raise Exception("Google Sheets credentials not found in environment variables.")
+    creds_dict = json.loads(creds_json)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    return gspread.authorize(creds)
 
 def main():
-    print("Starting Agent 2 - Data Processing...")
+    print("🚀 Starting Agent 2 - Technical Analysis")
 
-    sheet_name = 'Diario'  # Cambia acá al nombre exacto de tu hoja
+    sheet_name = "Diary"
+    symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"]  # The same that agent 1
 
-    df, sheet = get_sheet_data(sheet_name)
-    print(f"Data loaded: {len(df)} rows")
+    client = connect_to_sheets()
+    spreadsheet = client.open(sheet_name)
 
-    # Suponiendo que hay columna 'close' con precios de cierre
-    if 'close' not in df.columns:
-        raise Exception("Column 'close' not found in sheet data")
+    for symbol in symbols:
+        try:
+            worksheet = spreadsheet.worksheet(symbol)
+            print(f"📥 Reading for {symbol}")
+            data = worksheet.get_all_records()
+            df = pd.DataFrame(data)
 
-    df['RSI_14'] = calculate_rsi(df['close'])
-    df['SMA_14'] = calculate_sma(df['close'], 14)
-    df['SMA_7'] = calculate_sma(df['close'], 7)
+            if 'Close' not in df.columns:
+                print(f"⚠️ There is not any column 'Close' in {symbol}")
+                continue
 
-    print("Indicators calculated.")
+            df = calculate_indicators(df)
 
-    # Actualizamos Google Sheet (podés ajustar rango o columnas según tu formato)
-    # Ejemplo simple: sobreescribir toda la hoja (incluyendo encabezados)
-    sheet.clear()
-    sheet.update([df.columns.values.tolist()] + df.fillna('').values.tolist())
+            # Actualizar hoja con indicadores
+            worksheet.clear()
+            worksheet.update([df.columns.values.tolist()] + df.values.tolist())
+            print(f"✅Indicators calculated for {symbol}")
 
-    print("Google Sheet updated successfully.")
+        except Exception as e:
+            print(f"⚠️ Error  {symbol}: {e}")
 
 if __name__ == "__main__":
     main()
