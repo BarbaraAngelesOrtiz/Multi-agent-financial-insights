@@ -26,9 +26,8 @@ jobs:
 
     - name: 🚀 Run agentctl simulation (Agent 3)
       run: agentctl simulate agent_3/agent.yaml --inputs financial_data="Diary"
-
+      
     - name: Run script
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: creds.json
-      run: |
-        python your_script.py
+        GOOGLE_SHEETS_CREDENTIALS_PATH: creds.json
+      run: python your_script.py
