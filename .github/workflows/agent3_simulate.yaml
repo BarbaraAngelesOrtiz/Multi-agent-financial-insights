@@ -30,4 +30,4 @@ jobs:
     - name: Run script
       env:
         GOOGLE_SHEETS_CREDENTIALS_PATH: creds.json
-      run: python your_script.py
+      run: python agent_3/agent_3_simulator.py
