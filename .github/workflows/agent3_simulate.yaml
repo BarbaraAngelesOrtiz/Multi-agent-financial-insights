@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 23 * * *"  
+
 jobs:
   simulate:
     runs-on: ubuntu-latest
@@ -18,15 +19,12 @@ jobs:
         python-version: 3.10
 
     - name: 📦 Install dependencies
-      run: |
-        pip install -r requirements.txt
-        pip install agentctl
+      run: pip install -r requirements.txt
 
-    - name: 🛠️ Set up GOOGLE_SHEETS_CREDENTIALS
-      run: |
-        echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > creds.json
-        export GOOGLE_SHEETS_CREDENTIALS="$(cat creds.json)"
+    - name: 🛠️ Set up GOOGLE_SHEETS_CREDENTIALS env var
+      run: echo "GOOGLE_SHEETS_CREDENTIALS=${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}" >> $GITHUB_ENV
+
+    # Si agentctl es binario o requiere instalación especial, agregá aquí pasos para descargar y configurar agentctl
 
     - name: 🚀 Run agentctl simulation (Agent 3)
-      run: |
-        agentctl simulate agent_3/agent.yaml --inputs financial_data="Diary"
+      run: agentctl simulate agent_3/agent.yaml --inputs financial_data="Diary"
