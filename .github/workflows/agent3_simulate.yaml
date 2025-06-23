@@ -24,6 +24,9 @@ jobs:
       - name: Set GOOGLE_SHEETS_CREDENTIALS env var file
         run: echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > creds.json
 
+      - name: Run Agent 1 - Fetch raw data
+        run: python agent_1/agent_1_data_ingestion.py
+
       - name: Run Agent 2 - Process raw JSON data
         run: python agent_2/agent_2_local_processor.py
 
