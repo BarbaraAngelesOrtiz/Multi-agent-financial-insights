@@ -29,7 +29,7 @@ jobs:
         echo "GOOGLE_SHEETS_CREDENTIALS_PATH=creds.json" >> $GITHUB_ENV
 
     - name: 🧠 Run Agent 3 Python Script
-      run: python agent_3/agent_3_simulator.py
+      run: python agent_3/agent_3_main.py
 
     - name: 🚀 Simulate with agentctl
       run: agentctl simulate agent_3/agent.yaml --inputs financial_data="Diary"
