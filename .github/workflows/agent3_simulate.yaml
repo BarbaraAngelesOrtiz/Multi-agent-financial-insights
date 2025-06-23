@@ -21,13 +21,10 @@ jobs:
     - name: 📦 Install dependencies
       run: pip install -r requirements.txt
 
-    - name: ⚙️ Install agentctl
-      run: |
-        curl -sSL https://storage.googleapis.com/agent-runner/install.sh | bash
-        echo "$HOME/.agent/bin" >> $GITHUB_PATH
-
     - name: 🛠️ Set up GOOGLE_SHEETS_CREDENTIALS env var
       run: echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > creds.json
 
-    - name: 🚀 Run agentctl simulation (Agent 3)
-      run: agentctl simulate agent_3/agent.yaml --inputs financial_data="Diary"
+    - name: 🏃‍♂️ Run Agent 3 Python script
+      env:
+        GOOGLE_SHEETS_CREDENTIALS_PATH: creds.json
+      run: python agent_3/agent_3_simulator.py
