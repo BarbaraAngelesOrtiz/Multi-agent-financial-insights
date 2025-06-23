@@ -29,13 +29,9 @@ def get_alpha_vantage_data(symbol, api_key):
 
 def connect_to_sheets():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
-    if not creds_json:
-        raise Exception("Google Sheets credentials not found in environment variables.")
-        
-    creds_path = "creds.json"
-    creds = ServiceAccountCredentials.from_json_keyfile_name(creds_path, scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope)
     return gspread.authorize(creds)
+
 
 def write_dataframe_to_worksheet(spreadsheet, worksheet_name, df):
     try:
