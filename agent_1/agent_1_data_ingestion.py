@@ -32,8 +32,9 @@ def connect_to_sheets():
     creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
     if not creds_json:
         raise Exception("Google Sheets credentials not found in environment variables.")
-    creds_dict = json.loads(creds_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+        
+    creds_path = "creds.json"
+    creds = ServiceAccountCredentials.from_json_keyfile_name(creds_path, scope)
     return gspread.authorize(creds)
 
 def write_dataframe_to_worksheet(spreadsheet, worksheet_name, df):
