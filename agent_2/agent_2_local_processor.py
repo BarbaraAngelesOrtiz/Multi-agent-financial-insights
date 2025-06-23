@@ -32,6 +32,8 @@ def main():
     print("🚀 Starting Agent 2 - Local Mode")
 
     data_dir = "data"
+    os.makedirs(data_dir, exist_ok=True)  # <-- línea agregada
+
     symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"]
 
     for symbol in symbols:
@@ -49,6 +51,7 @@ def main():
             print(f"✅ Processed and saved {output_path}")
         except Exception as e:
             print(f"❌ Error processing {symbol}: {e}")
+
 
 if __name__ == "__main__":
     main()
