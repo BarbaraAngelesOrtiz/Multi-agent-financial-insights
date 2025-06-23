@@ -1,30 +1,44 @@
-name: Simulate Agent 3
+name: Run Agent 2 and Agent 3 Simulation
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 23 * * *"  
+    - cron: '0 23 * * *'  
 
 jobs:
-  simulate:
+  run_agents:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 🧾 Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: 🐍 Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.11
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
 
-    - name: 📦 Install dependencies
-      run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-    - name: 🛠️ Set up GOOGLE_SHEETS_CREDENTIALS env var
-      run: echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > creds.json
+      - name: Set GOOGLE_SHEETS_CREDENTIALS_PATH env var
+        run: echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > creds.json
 
-    - name: 🏃‍♂️ Run Agent 3 Python script
-      env:
-        GOOGLE_SHEETS_CREDENTIALS_PATH: creds.json
-      run: python agent_3/agent_3_main.py
+      - name: Run Agent 2 - Process raw JSON data
+        run: python agent_2_local_processor.py
+
+      - name: Run Agent 3 - Analyze processed data and generate recommendations
+        run: python agent_3_main.py
+
+      - name: Upload processed JSON files as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: processed-json-data
+          path: data/*_processed.json
+
+      - name: Upload analysis result file as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: analysis-result
+          path: data/analysis_result.txt
+
