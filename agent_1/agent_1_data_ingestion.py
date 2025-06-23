@@ -67,6 +67,11 @@ def main():
         try:
             df = get_alpha_vantage_data(symbol, alpha_key)
             write_dataframe_to_worksheet(spreadsheet, symbol, df)
+            #Also save locally for Agent 2
+            write_dataframe_to_worksheet(spreadsheet, symbol, df)
+            df.to_json(f"data/{symbol}_raw.json", orient='records') 
+
+
         except Exception as e:
             print(f"⚠️ Error  {symbol}: {e}")
 
