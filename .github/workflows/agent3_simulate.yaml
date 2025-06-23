@@ -24,6 +24,9 @@ jobs:
       - name: Set environment variables
         run: echo "ALPHA_VANTAGE_API_KEY=${{ secrets.ALPHA_VANTAGE_API_KEY }}" >> $GITHUB_ENV
 
+      - name: Export Google Sheets credentials
+        run: echo "GOOGLE_SHEETS_CREDENTIALS=${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}" >> $GITHUB_ENV
+
       - name: Run Agent 1 - Data ingestion
         run: python agent_1/agent_1_data_ingestion.py
 
