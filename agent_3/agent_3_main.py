@@ -10,11 +10,8 @@ load_dotenv()
 
 def connect_to_google_sheets():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
-    if not creds_json:
-        raise Exception("Google Sheets credentials not found in environment variables.")
-    creds_dict = json.loads(creds_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    creds_path = os.getenv('GOOGLE_SHEETS_CREDENTIALS_PATH', 'creds.json')
+    creds = ServiceAccountCredentials.from_json_keyfile_name(creds_path, scope)
     return gspread.authorize(creds)
 
 
