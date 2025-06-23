@@ -29,7 +29,11 @@ def get_alpha_vantage_data(symbol, api_key):
 
 def connect_to_sheets():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope)
+    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
+    if not creds_json:
+        raise Exception("Google Sheets credentials not found in environment variables.")
+    creds_dict = json.loads(creds_json)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     return gspread.authorize(creds)
 
 def write_dataframe_to_worksheet(spreadsheet, worksheet_name, df):
@@ -53,23 +57,20 @@ def main():
         raise Exception("ALPHA_VANTAGE_API_KEY not found.")
 
     sheet_name = "Diary"  
-    symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"]
-
-    # Asegurarse de que el directorio 'data' exista
-    os.makedirs("data", exist_ok=True)
+    symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"] 
 
     client = connect_to_sheets()
     spreadsheet = client.open(sheet_name)
 
     for symbol in symbols:
-        print(f"📥 Downloading data for: {symbol}")
+        print(f"📥Downloading data for: {symbol}")
         try:
             df = get_alpha_vantage_data(symbol, alpha_key)
             write_dataframe_to_worksheet(spreadsheet, symbol, df)
-            df.to_json(f"data/{symbol}_raw.json", orient='records')
-            print(f"💾 Saved JSON for {symbol}")
         except Exception as e:
-            print(f"⚠️ Error for {symbol}: {e}")
+            print(f"⚠️ Error  {symbol}: {e}")
 
 if __name__ == "__main__":
     main()
+
+
