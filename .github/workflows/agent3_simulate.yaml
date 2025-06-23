@@ -3,7 +3,7 @@ name: Run Agent 2 and Agent 3 Simulation
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 23 * * *'  
+    - cron: '0 23 * * *'
 
 jobs:
   run_agents:
@@ -21,8 +21,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Set GOOGLE_SHEETS_CREDENTIALS_PATH env var
+      - name: Set GOOGLE_SHEETS_CREDENTIALS env var file
         run: echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > creds.json
+
+      - name: Create data directory
+        run: mkdir -p data
 
       - name: Run Agent 2 - Process raw JSON data
         run: python agent_2/agent_2_local_processor.py
