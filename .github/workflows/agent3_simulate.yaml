@@ -3,7 +3,7 @@ name: Simulate Agent 3
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 23 * * *"
+    - cron: "0 23 * * *"  
 
 jobs:
   simulate:
@@ -19,17 +19,15 @@ jobs:
         python-version: 3.11
 
     - name: 📦 Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: ⚙️ Install agentctl
       run: |
-        pip install -r requirements.txt
-        pip install agentctl  # Si no está en requirements.txt
+        curl -sSL https://storage.googleapis.com/agent-runner/install.sh | bash
+        echo "$HOME/.agent/bin" >> $GITHUB_PATH
 
     - name: 🛠️ Set up GOOGLE_SHEETS_CREDENTIALS env var
-      run: |
-        echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > creds.json
-        echo "GOOGLE_SHEETS_CREDENTIALS_PATH=creds.json" >> $GITHUB_ENV
+      run: echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > creds.json
 
-    - name: 🧠 Run Agent 3 Python Script
-      run: python agent_3/agent_3_main.py
-
-    - name: 🚀 Simulate with agentctl
+    - name: 🚀 Run agentctl simulation (Agent 3)
       run: agentctl simulate agent_3/agent.yaml --inputs financial_data="Diary"
