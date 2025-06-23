@@ -31,13 +31,13 @@ jobs:
         run: python agent_3_main.py
 
       - name: Upload processed JSON files as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: processed-json-data
           path: data/*_processed.json
 
       - name: Upload analysis result file as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: analysis-result
           path: data/analysis_result.txt
