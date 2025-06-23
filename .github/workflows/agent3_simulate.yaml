@@ -27,4 +27,4 @@ jobs:
     - name: 🏃‍♂️ Run Agent 3 Python script
       env:
         GOOGLE_SHEETS_CREDENTIALS_PATH: creds.json
-      run: python agent_3/agent_3_simulator.py
+      run: python agent_3/agent_3_main.py
