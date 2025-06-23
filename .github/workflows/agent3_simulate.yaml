@@ -1,0 +1,32 @@
+name: Simulate Agent 3
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 23 * * *"  
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🧾 Checkout repo
+      uses: actions/checkout@v3
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
+
+    - name: 📦 Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install agentctl
+
+    - name: 🛠️ Set up GOOGLE_SHEETS_CREDENTIALS
+      run: |
+        echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > creds.json
+        export GOOGLE_SHEETS_CREDENTIALS="$(cat creds.json)"
+
+    - name: 🚀 Run agentctl simulation (Agent 3)
+      run: |
+        agentctl simulate agent_3/agent.yaml --inputs financial_data="Diary"
