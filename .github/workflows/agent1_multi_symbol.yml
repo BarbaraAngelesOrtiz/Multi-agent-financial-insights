@@ -28,6 +28,14 @@ jobs:
           GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         run: |
           python agent_1/agent_1_data_ingestion.py
+          
+      - name: Upload data files as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-json-files
+          path: data/*.json
+
+        
 
 
         
