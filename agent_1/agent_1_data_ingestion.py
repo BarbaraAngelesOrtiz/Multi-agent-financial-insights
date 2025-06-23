@@ -49,6 +49,15 @@ def write_dataframe_to_worksheet(spreadsheet, worksheet_name, df):
     except Exception as e:
         print(f"⚠️ Error writing in tab '{worksheet_name}': {e}")
 
+def save_dataframe_as_json(df, symbol):
+    os.makedirs("data", exist_ok=True)
+    file_path = f"data/{symbol}_raw.json"
+    try:
+        df.to_json(file_path, orient="records", indent=2)
+        print(f"💾 Saved raw JSON for {symbol} to {file_path}")
+    except Exception as e:
+        print(f"⚠️ Error saving {symbol} to JSON: {e}")
+
 def main():
     print("🚀 Starting Agent 1 - Multi-symbol Ingestion")
 
