@@ -25,7 +25,7 @@ jobs:
         run: echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > creds.json
 
       - name: Run Agent 2 - Process raw JSON data
-        run: python agent_2_local_processor.py
+        run: python agent_2/agent_2_local_processor.py
 
       - name: Run Agent 3 - Analyze processed data and generate recommendations
         run: python agent_3_main.py
