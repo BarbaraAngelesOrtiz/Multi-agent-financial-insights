@@ -36,12 +36,21 @@ def main():
     sheet_name = "Financial Signals"
     tab_name = "Diary"
     symbol = "AAPL"  # O el que corresponda
+
+    os.makedirs("data", exist_ok=True)  # <-- línea agregada
+
     try:
         df = load_signals(sheet_name, tab_name)
         result = analyze_signals(df, symbol)
         print(result)
+
+        # Guardar resultado para subir como artifact
+        with open("data/analysis_result.txt", "w", encoding="utf-8") as f:
+            f.write(result)
+
     except Exception as e:
         print(f"Error: {e}")
+
 
 if __name__ == "__main__":
     main()
