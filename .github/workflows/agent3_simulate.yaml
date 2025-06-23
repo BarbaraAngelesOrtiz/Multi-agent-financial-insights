@@ -3,7 +3,7 @@ name: Run Agent 2 and Agent 3 Simulation
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '0 23 * * *'  # Todos los días a las 23:00 UTC
 
 jobs:
   run_agents:
@@ -21,11 +21,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Set environment variables
-        run: echo "ALPHA_VANTAGE_API_KEY=${{ secrets.ALPHA_VANTAGE_API_KEY }}" >> $GITHUB_ENV
-
       - name: Save Google Sheets credentials to file
         run: echo "${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}" > creds.json
+
+      - name: Set environment variables
+        run: echo "ALPHA_VANTAGE_API_KEY=${{ secrets.ALPHA_VANTAGE_API_KEY }}" >> $GITHUB_ENV
 
       - name: Run Agent 1 - Data ingestion
         run: python agent_1/agent_1_data_ingestion.py
@@ -50,4 +50,3 @@ jobs:
         with:
           name: analysis-result
           path: data/analysis_result.txt
-
