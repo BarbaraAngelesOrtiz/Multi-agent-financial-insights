@@ -28,7 +28,7 @@ jobs:
         run: python agent_2/agent_2_local_processor.py
 
       - name: Run Agent 3 - Analyze processed data and generate recommendations
-        run: python agent_3_main.py
+        run: python agent_3/agent_3_main.py
 
       - name: Upload processed JSON files as artifact
         uses: actions/upload-artifact@v4
