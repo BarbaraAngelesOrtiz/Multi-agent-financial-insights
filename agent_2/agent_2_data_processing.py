@@ -32,7 +32,7 @@ def calculate_indicators(df):
 
 def connect_to_sheets():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
+    creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS_MULTI')
     if not creds_json:
         raise Exception("Google Sheets credentials not found in environment variables.")
     creds_dict = json.loads(creds_json)
@@ -42,7 +42,7 @@ def connect_to_sheets():
 def main():
     print("🚀 Starting Agent 2 - Technical Analysis")
 
-    sheet_name = "Diary"
+    sheet_name = "Diary Stocks"
     symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"]
 
     client = connect_to_sheets()
