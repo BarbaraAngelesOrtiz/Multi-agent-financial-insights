@@ -25,7 +25,7 @@ jobs:
       - name: Run Agent 1 Multi-symbol
         env:
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
-          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS_MULTI }}
+          GOOGLE_SHEETS_CREDENTIALS_MULTI: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS_MULTI }}
         run: |
           python agent_1/agent_1_data_ingestion.py
 
