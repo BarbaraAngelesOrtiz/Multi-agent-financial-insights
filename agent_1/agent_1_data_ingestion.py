@@ -56,7 +56,7 @@ def main():
     if not alpha_key:
         raise Exception("ALPHA_VANTAGE_API_KEY not found.")
 
-    sheet_name = "Diary Stocks"  
+    sheet_name = "Stocks"  
     symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"] 
 
     client = connect_to_sheets()
