@@ -28,7 +28,11 @@ def get_alpha_vantage_data(symbol, api_key):
     return df
 
 def connect_to_sheets():
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    scope = [
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive.file',
+    ]
+
     creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS_MULTI')
     if not creds_json:
         raise Exception("Google Sheets credentials not found in environment variables.")
