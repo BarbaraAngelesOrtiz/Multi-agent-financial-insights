@@ -1,8 +1,8 @@
 name: Agent 1 - Multi-Symbol Ingestion
 
 on:
-  schedule:
-    - cron: '0 16 * * *'  # Every day at 16:00 UTC
+  #schedule:
+    #- cron: '0 16 * * *'  # Every day at 16:00 UTC
   workflow_dispatch:     
 jobs:
   run-agent1:
@@ -25,7 +25,7 @@ jobs:
       - name: Run Agent 1 Multi-symbol
         env:
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
-          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS_MULTI }}
         run: |
           python agent_1/agent_1_data_ingestion.py
 
