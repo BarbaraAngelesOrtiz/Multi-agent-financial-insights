@@ -42,7 +42,7 @@ def connect_to_sheets():
 def main():
     print("🚀 Starting Agent 2 - Technical Analysis")
 
-    sheet_name = "Diary Stocks"
+    sheet_name = "Stocks"
     symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"]
 
     client = connect_to_sheets()
