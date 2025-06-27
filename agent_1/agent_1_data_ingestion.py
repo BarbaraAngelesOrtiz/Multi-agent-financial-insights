@@ -64,7 +64,7 @@ def main():
     symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"] 
 
     client = connect_to_sheets()
-    spreadsheet = client.open(sheet_name)
+    spreadsheet = client.open_by_key("18V5k_1CbLQzCR0QsO4vZtcjt59Ipjf5KkisE4QWBzfA")
 
     for symbol in symbols:
         print(f"📥Downloading data for: {symbol}")
