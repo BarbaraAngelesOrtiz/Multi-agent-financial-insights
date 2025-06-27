@@ -56,7 +56,7 @@ def write_recommendations(sheet, recommendations):
 def main():
     print("🚀 Starting Agent 3 - Signal Analysis")
 
-    sheet_name = "Diary Stocks"
+    sheet_name = "Stocks"
     symbols = ["AAPL", "GOOGL", "MSFT", "TSLA"]
 
     client = connect_to_google_sheets()
