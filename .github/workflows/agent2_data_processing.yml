@@ -25,6 +25,6 @@ jobs:
 
       - name: Run Agent 2 - Data Processing
         env:
-          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS_MULTI }}
+          GOOGLE_SHEETS_CREDENTIALS_MULTI: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS_MULTI }}
         run: |
           python agent_2/agent_2_data_processing.py
