@@ -1,8 +1,8 @@
 name: Agent 3 - Recommender Engine
 
 on:
-  schedule:
-    - cron: '10 16 * * *'  # Every day at 16:10 UTC (after Agent 1 and 2)
+  #schedule:
+    #- cron: '10 16 * * *'  # Every day at 16:10 UTC (after Agent 1 and 2)
   workflow_dispatch:       # Allows you to run it manually
 
 jobs:
@@ -25,6 +25,6 @@ jobs:
 
       - name: Run Agent 3 - Recommender
         env:
-          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS_MULTI }}
         run: |
           python agent_3/agent_3_main.py
