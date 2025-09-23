@@ -77,7 +77,7 @@ Example:
 
 ![NumPy](https://img.shields.io/badge/numpy-1.26.0-blue)
 
-![Pandas](https://img.shields.io/badge/pandas-2.1.0-lightblue)
+![Pandas](https://img.shields.io/badge/pandas-2.1.0-blue)
 
 ![GitHub Actions](https://img.shields.io/badge/build-passing-brightgreen)
 
