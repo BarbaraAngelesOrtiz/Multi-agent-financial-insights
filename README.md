@@ -2,7 +2,7 @@
 
 This project uses automated agents to download, analyze, and recommend stock signals in real time, integrated with Google Sheets and scheduled to run daily using GitHub Actions.
 
------
+----
 
 ## 🚀 Overview
 
